@@ -7,11 +7,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class Board extends Model
 {
+    //
+
     use HasFactory;
+    
+    protected $fillable = [
+        'name',
+        'numCards'
+    ];
 
-    protected $fillable = ['name', 'description'];
-
-    public function cards()
+        public function cards()
     {
         return $this->hasMany(Card::class);
     }

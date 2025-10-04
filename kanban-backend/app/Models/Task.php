@@ -2,21 +2,23 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Task extends Model
 {
-    use HasFactory;
-
+    //
     protected $fillable = [
-        'title',
+        'taskName',
         'description',
-        'due_date',
-        'card_id',
-        'status',
+        'startDate',
+        'endDate',
+        'allocator',
+        'employee',
+        'priority',
+        'progress',
+        'card_id'
     ];
-
+    
     public function card()
     {
         return $this->belongsTo(Card::class);
