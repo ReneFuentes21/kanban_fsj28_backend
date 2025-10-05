@@ -261,8 +261,7 @@
                         "application/json": {
                             "schema": {
                                 "required": [
-                                    "title",
-                                    "order"
+                                    "title"
                                 ],
                                 "properties": {
                                     "title": {
@@ -270,6 +269,7 @@
                                         "example": "En Progreso"
                                     },
                                     "order": {
+                                        "description": "Opcional. Si se omite, se calcula automáticamente.",
                                         "type": "integer",
                                         "example": "2"
                                     }
@@ -289,6 +289,9 @@
                                 }
                             }
                         }
+                    },
+                    "404": {
+                        "description": "Tablero no encontrado"
                     },
                     "422": {
                         "description": "Error de validación"
@@ -335,7 +338,7 @@
                     "Tarjetas"
                 ],
                 "summary": "Actualiza el título o la posición de una tarjeta (columna)",
-                "description": "Se usa para renombrar la columna o para reordenar las columnas dentro del mismo tablero.",
+                "description": "Se usa para renombrar la columna o para reordenar las columnas. Opcionalmente, permite moverla de tablero.",
                 "operationId": "85ff55289e5a41500a52a1d683e23409",
                 "parameters": [
                     {
@@ -361,6 +364,11 @@
                                     "order": {
                                         "type": "integer",
                                         "example": "3"
+                                    },
+                                    "board_id": {
+                                        "description": "Opcional. Permite mover la tarjeta a un tablero diferente.",
+                                        "type": "integer",
+                                        "example": "5"
                                     }
                                 },
                                 "type": "object"
@@ -420,7 +428,7 @@
                     "Tarjetas"
                 ],
                 "summary": "Mueve una tarjeta a otro tablero",
-                "description": "Método específico para actualizar el board_id de una tarjeta, lo que la mueve a otro tablero.",
+                "description": "Actualiza solo el board_id de una tarjeta para moverla a otro tablero. Utiliza el método PATCH.",
                 "operationId": "38710aa41711e7cdabe9cfc723199a14",
                 "parameters": [
                     {
@@ -707,14 +715,14 @@
                 }
             }
         },
-        "/api/v1/tasks/{id}/move": {
+        "/api/v1/tasks/update-card-id/{id}": {
             "patch": {
                 "tags": [
                     "Tareas"
                 ],
                 "summary": "Mueve una tarea a una nueva tarjeta (columna)",
                 "description": "Método utilizado para cambiar la tarjeta (columna) a la que pertenece la tarea (ej. de 'Por Hacer' a 'En Progreso').",
-                "operationId": "313340822475231c04ec3f0dbc73c376",
+                "operationId": "382e73aeafa191e531ce7b2e2e986915",
                 "parameters": [
                     {
                         "name": "id",
@@ -760,14 +768,14 @@
                 }
             }
         },
-        "/api/v1/tasks/{id}/days-left": {
+        "/api/v1/tasks/daysLeft/{id}": {
             "get": {
                 "tags": [
                     "Tareas"
                 ],
                 "summary": "Calcula los días restantes hasta la fecha de vencimiento",
                 "description": "Devuelve el número de días que faltan para el endDate de la tarea.",
-                "operationId": "6f3acff214a7ee240f963bae81033332",
+                "operationId": "40ba1eb8090e7e9f735089752005e5d5",
                 "parameters": [
                     {
                         "name": "id",

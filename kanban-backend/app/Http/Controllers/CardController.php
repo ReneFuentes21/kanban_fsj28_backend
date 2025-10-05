@@ -60,9 +60,9 @@ class CardController extends Controller
 
         // Obtener las tarjetas del tablero, forzando el orden por 'order' ascendente.
         $cards = Card::where('board_id', $boardId)
-                     ->orderBy('order', 'asc')
+                     //->orderBy( 'asc')
                      ->get();
-
+        //$cards = Board::all();
         return response()->json($cards, 200);
     }
 
@@ -114,18 +114,18 @@ class CardController extends Controller
         // 2. Validación: 'order' es 'nullable' (opcional) y 'title' es obligatorio.
         $validatedData = $request->validate([
             'title' => 'required|string|max:255',
-            'order' => 'nullable|integer', 
+            //'order' => 'nullable|integer',  Preguntar si es necesario
         ]);
         
-        // 3. Lógica para calcular el 'order' (posición) si no fue proporcionado.
-        $maxOrder = Card::where('board_id', $boardId)->max('order');
-        $newOrder = $validatedData['order'] ?? ($maxOrder === null ? 1 : $maxOrder + 1);
+        // 3. Lógica para calcular el 'order' (posición) si no fue proporcionado. Preguntar
+       // $maxOrder = Card::where('board_id', $boardId)->max('order');
+        //$newOrder = $validatedData['order'] ?? ($maxOrder === null ? 1 : $maxOrder + 1);   Preguntar si es necesario
 
         // 4. Crear la tarjeta.
         $card = Card::create([
             'board_id' => $boardId,
-            'title' => $validatedData['title'],
-            'order' => $newOrder,
+            'name' => $validatedData['title'],
+            
         ]);
 
         return response()->json($card->toArray())
@@ -264,6 +264,8 @@ class CardController extends Controller
         $card->update($request->only('board_id')); 
         
         return response()->json(["message" => "ID de tablero actualizado exitosamente"], 200);
+
+        //echo "Hola";
     }
 
     /**

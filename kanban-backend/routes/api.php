@@ -38,14 +38,14 @@ Route::prefix('v1')->group(function() {
     //Route::post('cards',[CardController::class, 'store']);//crear tarjeta
 
     Route::put('/cards/{card}',[CardController::class, 'update']);//actulizar tarjeta
-    Route::patch('/cards/{id}/move',[CardController::class, 'moveCard']);//actualizar id de la tarjeta
+    Route::patch('/cards/{id}/move',[CardController::class, 'updateId']);//actualizar id de la tarjeta
     Route::delete('cards/{id}',[CardController::class, 'destroy']);//borrar tarjeta
     
     //tasks
     Route::get('/tasks', [TaskController::class, 'index']);//tpdas las tareas
     Route::get('/tasks/{id}', [TaskController::class, 'show']);//tarea por id
     Route::post('/tasks',[TaskController::class, 'store']);//crear tarea
-    Route::patch('/tasks/{id}', [TaskController::class,'update']);//editar tarea
+    Route::put('/tasks/{id}', [TaskController::class,'update']);//editar tarea
     Route::patch('/tasks/update-card-id/{id}', [TaskController::class,'updateId']);//actualizar id
     Route::get('/tasks/daysLeft/{id}', [TaskController::class, 'daysLeft']);//ver cuantos dias quedan
     Route::delete('/tasks/{id}',[TaskController::class, 'destroy']);//borrar tarea

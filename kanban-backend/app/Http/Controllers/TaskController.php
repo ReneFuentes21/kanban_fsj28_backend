@@ -177,7 +177,7 @@ class TaskController extends Controller
             'allocator' => 'required|string',
             'employee' => 'sometimes|string',
             'priority' => 'required|string',
-            'progress' => 'required|string',
+            'progress' => 'required|integer', 
             
         ]);
         if($validator->fails()){
@@ -228,7 +228,7 @@ class TaskController extends Controller
         $validator = Validator::make($request->all(),[
             'taskName' => 'required|string',
             'description' => 'required|string',
-            'priority' => 'required|string',
+            'priority' => 'required|string',   
             'endDate' => 'nullable|date|after_or_equal:today'
         ]);
         if($validator->fails()){
@@ -241,7 +241,7 @@ class TaskController extends Controller
 
     /**
      * @OA\Patch(
-     * path="/api/v1/tasks/{id}/move",
+     * path="/api/v1/tasks/update-card-id/{id}",
      * tags={"Tareas"},
      * summary="Mueve una tarea a una nueva tarjeta (columna)",
      * description="Método utilizado para cambiar la tarjeta (columna) a la que pertenece la tarea (ej. de 'Por Hacer' a 'En Progreso').",
@@ -274,10 +274,11 @@ class TaskController extends Controller
      * )
      * )
      */
+    
     public function updateId(Request $request, $id)
     {
         $validator = Validator::make($request->all(),[
-            'card_id' => 'required|string'
+            'card_id' => 'required|integer'  //Preguntar si sera string o integer
         ]);
         if($validator->fails()){
             return response()->json(['errors' => $validator->errors()], 422);
@@ -289,7 +290,7 @@ class TaskController extends Controller
 
     /**
      * @OA\Get(
-     * path="/api/v1/tasks/{id}/days-left",
+     * path="/api/v1/tasks/daysLeft/{id}",
      * tags={"Tareas"},
      * summary="Calcula los días restantes hasta la fecha de vencimiento",
      * description="Devuelve el número de días que faltan para el endDate de la tarea.",
