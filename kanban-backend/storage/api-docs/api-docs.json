@@ -1,0 +1,977 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Kanban Board API",
+        "description": "API para gestionar Tableros, Tarjetas y Tareas de un sistema Kanban, siguiendo la especificación OpenAPI 3.",
+        "contact": {
+            "name": "Tu Nombre",
+            "email": "tu.email@ejemplo.com"
+        },
+        "license": {
+            "name": "Licencia Estándar de API",
+            "url": "http://localhost/licencia"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://127.0.0.1:8000",
+            "description": "Servidor de desarrollo local"
+        }
+    ],
+    "paths": {
+        "/api/v1/boards": {
+            "get": {
+                "tags": [
+                    "Tableros"
+                ],
+                "summary": "Obtiene todos los tableros",
+                "operationId": "f7ecb9e5d3d3d6aa7f6081cd03d8e00d",
+                "responses": {
+                    "200": {
+                        "description": "Lista de tableros obtenida exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Board"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Tableros"
+                ],
+                "summary": "Crea un nuevo tablero",
+                "operationId": "b768d6d0ee7d5a2a30bc2689bc6e61f7",
+                "requestBody": {
+                    "description": "Datos del tablero a crear",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Tablero de Marketing"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Tablero creado exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Board"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación"
+                    }
+                }
+            }
+        },
+        "/api/v1/boards/{id}": {
+            "get": {
+                "tags": [
+                    "Tableros"
+                ],
+                "summary": "Muestra un tablero específico",
+                "operationId": "9f4572331f161946dee42d3a7951f7dd",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID del tablero a mostrar",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Tablero encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Board"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Tablero no encontrado"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Tableros"
+                ],
+                "summary": "Actualiza un tablero existente",
+                "operationId": "981d46aeff4f10ce20e149c9d1574ff1",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID del tablero a actualizar",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Datos del tablero para actualizar",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Tablero de Marketing V2"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Tablero actualizado exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Board"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Tablero no encontrado"
+                    },
+                    "422": {
+                        "description": "Error de validación"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Tableros"
+                ],
+                "summary": "Elimina un tablero por su ID",
+                "operationId": "b74ae434c2355f06084116a24d59ad90",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID del tablero a eliminar",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Tablero eliminado exitosamente (No Content)"
+                    },
+                    "404": {
+                        "description": "Tablero no encontrado"
+                    }
+                }
+            }
+        },
+        "/api/v1/boards/{boardId}/cards": {
+            "get": {
+                "tags": [
+                    "Tarjetas"
+                ],
+                "summary": "Obtiene todas las tarjetas (columnas) de un tablero específico",
+                "operationId": "dbaa4d87bf14dafb5875b6db094aabeb",
+                "parameters": [
+                    {
+                        "name": "boardId",
+                        "in": "path",
+                        "description": "ID del tablero",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de tarjetas obtenida exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Card"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Tablero no encontrado"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Tarjetas"
+                ],
+                "summary": "Crea una nueva tarjeta (columna) para el tablero especificado",
+                "operationId": "4b10eb5924d4b5f4573351c778d9a73a",
+                "parameters": [
+                    {
+                        "name": "boardId",
+                        "in": "path",
+                        "description": "ID del tablero al que se añadirá la tarjeta",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Datos de la tarjeta a crear",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "title"
+                                ],
+                                "properties": {
+                                    "title": {
+                                        "type": "string",
+                                        "example": "En Progreso"
+                                    },
+                                    "order": {
+                                        "description": "Opcional. Si se omite, se calcula automáticamente.",
+                                        "type": "integer",
+                                        "example": "2"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Tarjeta creada exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Card"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Tablero no encontrado"
+                    },
+                    "422": {
+                        "description": "Error de validación"
+                    }
+                }
+            }
+        },
+        "/api/v1/cards/{id}": {
+            "get": {
+                "tags": [
+                    "Tarjetas"
+                ],
+                "summary": "Obtiene una tarjeta específica por ID",
+                "operationId": "7b398c0e2cb012db06205baa0579bd51",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la tarjeta",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Tarjeta obtenida exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Card"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Tarjeta no encontrada"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Tarjetas"
+                ],
+                "summary": "Actualiza el título o la posición de una tarjeta (columna)",
+                "description": "Se usa para renombrar la columna o para reordenar las columnas. Opcionalmente, permite moverla de tablero.",
+                "operationId": "85ff55289e5a41500a52a1d683e23409",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la tarjeta a actualizar",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Datos para actualizar",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "title": {
+                                        "type": "string",
+                                        "example": "Listo para QA"
+                                    },
+                                    "order": {
+                                        "type": "integer",
+                                        "example": "3"
+                                    },
+                                    "board_id": {
+                                        "description": "Opcional. Permite mover la tarjeta a un tablero diferente.",
+                                        "type": "integer",
+                                        "example": "5"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Tarjeta actualizada exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Card"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Tarjeta no encontrada"
+                    },
+                    "422": {
+                        "description": "Error de validación"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Tarjetas"
+                ],
+                "summary": "Elimina una tarjeta (columna) por su ID",
+                "operationId": "ec04f9605058fb5bfc97859fdd9ea7ed",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la tarjeta a eliminar",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Tarjeta eliminada exitosamente (No Content)"
+                    },
+                    "404": {
+                        "description": "Tarjeta no encontrada"
+                    }
+                }
+            }
+        },
+        "/api/v1/cards/{id}/move": {
+            "patch": {
+                "tags": [
+                    "Tarjetas"
+                ],
+                "summary": "Mueve una tarjeta a otro tablero",
+                "description": "Actualiza solo el board_id de una tarjeta para moverla a otro tablero. Utiliza el método PATCH.",
+                "operationId": "38710aa41711e7cdabe9cfc723199a14",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la tarjeta a mover",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Nuevo ID del tablero de destino",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "board_id"
+                                ],
+                                "properties": {
+                                    "board_id": {
+                                        "description": "El ID del nuevo tablero al que pertenece la tarjeta.",
+                                        "type": "integer",
+                                        "example": "10"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "ID de tablero actualizado exitosamente"
+                    },
+                    "404": {
+                        "description": "Tarjeta no encontrada"
+                    },
+                    "422": {
+                        "description": "Error de validación"
+                    }
+                }
+            }
+        },
+        "/api/v1/tasks": {
+            "get": {
+                "tags": [
+                    "Tareas"
+                ],
+                "summary": "Obtiene todas las tareas",
+                "description": "Recupera una lista de todas las tareas existentes.",
+                "operationId": "4293c00a4cffdb881d9f6c2099875f96",
+                "responses": {
+                    "200": {
+                        "description": "Lista de tareas obtenida exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Task"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Tareas"
+                ],
+                "summary": "Crea una nueva tarea",
+                "operationId": "379ae513b47f83882f91f2b9143fc425",
+                "requestBody": {
+                    "description": "Datos de la tarea a crear",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "taskName",
+                                    "description",
+                                    "startDate",
+                                    "endDate",
+                                    "allocator",
+                                    "priority",
+                                    "progress",
+                                    "card_id"
+                                ],
+                                "properties": {
+                                    "taskName": {
+                                        "type": "string",
+                                        "example": "Implementar OAuth"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "Configurar la autenticación con Google y Facebook."
+                                    },
+                                    "startDate": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2025-10-01"
+                                    },
+                                    "endDate": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2025-10-15"
+                                    },
+                                    "allocator": {
+                                        "type": "string",
+                                        "example": "Jane Doe"
+                                    },
+                                    "employee": {
+                                        "type": "string",
+                                        "example": "John Smith",
+                                        "nullable": true
+                                    },
+                                    "priority": {
+                                        "type": "string",
+                                        "enum": [
+                                            "Alta",
+                                            "Media",
+                                            "Baja"
+                                        ],
+                                        "example": "Alta"
+                                    },
+                                    "progress": {
+                                        "type": "string",
+                                        "example": "Pendiente"
+                                    },
+                                    "card_id": {
+                                        "type": "integer",
+                                        "example": "5"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Tarea creada exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Task"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación"
+                    }
+                }
+            }
+        },
+        "/api/v1/tasks/{id}": {
+            "get": {
+                "tags": [
+                    "Tareas"
+                ],
+                "summary": "Obtiene una tarea específica por ID",
+                "operationId": "5c89555764433d66ee2d4a8aefc4b0c1",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la tarea a buscar",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Tarea obtenida exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Task"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Tarea no encontrada"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Tareas"
+                ],
+                "summary": "Actualiza los detalles de una tarea",
+                "description": "Permite actualizar el nombre, descripción, prioridad y/o fecha de finalización de una tarea.",
+                "operationId": "2d67628d964268e2b57c176e100ccf23",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la tarea a actualizar",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Campos de la tarea a actualizar",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "taskName": {
+                                        "type": "string",
+                                        "example": "Implementar Autenticación"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "Descripción actualizada."
+                                    },
+                                    "priority": {
+                                        "type": "string",
+                                        "enum": [
+                                            "Alta",
+                                            "Media",
+                                            "Baja"
+                                        ],
+                                        "example": "Media"
+                                    },
+                                    "endDate": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2025-10-20",
+                                        "nullable": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Tarea actualizada exitosamente"
+                    },
+                    "422": {
+                        "description": "Error de validación"
+                    },
+                    "404": {
+                        "description": "Tarea no encontrada"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Tareas"
+                ],
+                "summary": "Elimina una tarea por su ID",
+                "operationId": "4b08d06f1cae255ad9f54935cc9d8fed",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la tarea a eliminar",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Tarea eliminada exitosamente (No Content)"
+                    },
+                    "404": {
+                        "description": "Tarea no encontrada"
+                    }
+                }
+            }
+        },
+        "/api/v1/tasks/update-card-id/{id}": {
+            "patch": {
+                "tags": [
+                    "Tareas"
+                ],
+                "summary": "Mueve una tarea a una nueva tarjeta (columna)",
+                "description": "Método utilizado para cambiar la tarjeta (columna) a la que pertenece la tarea (ej. de 'Por Hacer' a 'En Progreso').",
+                "operationId": "382e73aeafa191e531ce7b2e2e986915",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la tarea a mover",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Nuevo ID de la tarjeta de destino",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "card_id"
+                                ],
+                                "properties": {
+                                    "card_id": {
+                                        "description": "El ID de la tarjeta a la que se moverá la tarea.",
+                                        "type": "integer",
+                                        "example": "8"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "ID de tarjeta actualizado exitosamente"
+                    },
+                    "422": {
+                        "description": "Error de validación"
+                    },
+                    "404": {
+                        "description": "Tarea no encontrada"
+                    }
+                }
+            }
+        },
+        "/api/v1/tasks/daysLeft/{id}": {
+            "get": {
+                "tags": [
+                    "Tareas"
+                ],
+                "summary": "Calcula los días restantes hasta la fecha de vencimiento",
+                "description": "Devuelve el número de días que faltan para el endDate de la tarea.",
+                "operationId": "40ba1eb8090e7e9f735089752005e5d5",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la tarea",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Días restantes calculados",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "taskName": {
+                                            "type": "string",
+                                            "example": "Implementar OAuth"
+                                        },
+                                        "endDate": {
+                                            "type": "string",
+                                            "format": "date",
+                                            "example": "2025-10-15"
+                                        },
+                                        "remaining_days": {
+                                            "description": "Días restantes. Negativo si la fecha ya pasó.",
+                                            "type": "integer",
+                                            "example": 10
+                                        },
+                                        "detail": {
+                                            "type": "string",
+                                            "example": "Queda tiempo o La tarea ya termino"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Tarea no encontrada"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Board": {
+                "title": "Board",
+                "description": "Modelo de datos de un Tablero (Board)",
+                "properties": {
+                    "id": {
+                        "description": "ID único del tablero",
+                        "type": "integer"
+                    },
+                    "name": {
+                        "description": "Nombre del tablero (ej. Proyecto Alfa)",
+                        "type": "string"
+                    },
+                    "created_at": {
+                        "description": "Fecha de creación",
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "description": "Fecha de última actualización",
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "type": "object"
+            },
+            "Card": {
+                "title": "Card",
+                "description": "Modelo de datos de una Tarjeta (Card), que actúa como columna dentro de un Tablero (Board).",
+                "properties": {
+                    "id": {
+                        "description": "ID único de la tarjeta/columna",
+                        "type": "integer"
+                    },
+                    "board_id": {
+                        "description": "ID del tablero al que pertenece la tarjeta",
+                        "type": "integer"
+                    },
+                    "title": {
+                        "description": "Título de la tarjeta (ej. Por Hacer, En Progreso)",
+                        "type": "string"
+                    },
+                    "order": {
+                        "description": "Posición de la tarjeta dentro del tablero (para ordenar las columnas)",
+                        "type": "integer"
+                    },
+                    "created_at": {
+                        "description": "Fecha de creación",
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "description": "Fecha de última actualización",
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "type": "object"
+            },
+            "Task": {
+                "title": "Task",
+                "description": "Modelo de datos de una Tarea, el elemento individual dentro de una Tarjeta (Card).",
+                "properties": {
+                    "id": {
+                        "description": "ID único de la tarea",
+                        "type": "integer"
+                    },
+                    "card_id": {
+                        "description": "ID de la tarjeta (columna) a la que pertenece la tarea",
+                        "type": "integer"
+                    },
+                    "taskName": {
+                        "description": "Nombre o título de la tarea",
+                        "type": "string"
+                    },
+                    "description": {
+                        "description": "Descripción detallada de la tarea",
+                        "type": "string"
+                    },
+                    "startDate": {
+                        "description": "Fecha de inicio de la tarea",
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "endDate": {
+                        "description": "Fecha de vencimiento o fin de la tarea",
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "allocator": {
+                        "description": "Usuario que asignó la tarea",
+                        "type": "string"
+                    },
+                    "employee": {
+                        "description": "Usuario al que está asignada la tarea",
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "priority": {
+                        "description": "Prioridad de la tarea",
+                        "type": "string",
+                        "enum": [
+                            "Alta",
+                            "Media",
+                            "Baja"
+                        ]
+                    },
+                    "progress": {
+                        "description": "Estado del progreso (ej. Pendiente, En curso, Bloqueado)",
+                        "type": "string"
+                    },
+                    "created_at": {
+                        "description": "Fecha de creación",
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "description": "Fecha de última actualización",
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "type": "object"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Tableros",
+            "description": "Operaciones CRUD para la gestión de tableros (Boards)."
+        },
+        {
+            "name": "Tarjetas",
+            "description": "Operaciones CRUD para la gestión de tarjetas/columnas (Cards)."
+        },
+        {
+            "name": "Tareas",
+            "description": "Operaciones CRUD para la gestión de tareas individuales (Tasks)."
+        }
+    ],
+    "externalDocs": {
+        "description": "Documentación adicional y tutoriales",
+        "url": "http://localhost/docs/external"
+    }
+}

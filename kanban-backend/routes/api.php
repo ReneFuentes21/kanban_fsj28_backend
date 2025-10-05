@@ -25,23 +25,28 @@ Route::prefix('v1')->group(function() {
     Route::get('/boards', [BoardController::class, 'index']);//todos los tableros
     Route::get('/boards/{id}', [BoardController::class, 'show']);//tablero por id
     Route::post('/boards',[BoardController::class,'store']);//crear tablero
-    Route::patch('/boards/update/{id}',[BoardController::class, 'update']);//actulizar tablero
+    Route::put('/boards/{id}',[BoardController::class, 'update']);//actulizar tablero
+    Route::patch('/boards/{id}',[BoardController::class, 'update']);//actulizar tablero
     Route::delete('/boards/{id}',[BoardController::class,'destroy']);//eliminar tablero
 
     //cards
-    Route::get('/cards',[CardController::class, 'index']);//todas las tarjetas
+    //Route::get('/cards',[CardController::class, 'index']);//todas las tarjetas
+    Route::get('/boards/{boardId}/cards', [CardController::class, 'index']);
     Route::get('/cards/{id}',[CardController::class, 'show']);//tarjeta por id
-    Route::post('cards',[CardController::class, 'store']);//crear tarjeta
-    Route::put('/cards/update/{id}',[CardController::class, 'update']);//actulizar tarjeta
-    Route::patch('/cards/updateId/{id}',[CardController::class, 'updateId']);//actualizar id de la tarjeta
+
+    Route::post('boards/{boardId}/cards', [CardController::class, 'store']);
+    //Route::post('cards',[CardController::class, 'store']);//crear tarjeta
+
+    Route::put('/cards/{card}',[CardController::class, 'update']);//actulizar tarjeta
+    Route::patch('/cards/{id}/move',[CardController::class, 'updateId']);//actualizar id de la tarjeta
     Route::delete('cards/{id}',[CardController::class, 'destroy']);//borrar tarjeta
     
     //tasks
     Route::get('/tasks', [TaskController::class, 'index']);//tpdas las tareas
     Route::get('/tasks/{id}', [TaskController::class, 'show']);//tarea por id
     Route::post('/tasks',[TaskController::class, 'store']);//crear tarea
-    Route::patch('/tasks/update/{id}', [TaskController::class,'update']);//editar tarea
-    Route::patch('/tasks/updateId/{id}', [TaskController::class,'updateId']);//actualizar id
+    Route::put('/tasks/{id}', [TaskController::class,'update']);//editar tarea
+    Route::patch('/tasks/update-card-id/{id}', [TaskController::class,'updateId']);//actualizar id
     Route::get('/tasks/daysLeft/{id}', [TaskController::class, 'daysLeft']);//ver cuantos dias quedan
     Route::delete('/tasks/{id}',[TaskController::class, 'destroy']);//borrar tarea
 
