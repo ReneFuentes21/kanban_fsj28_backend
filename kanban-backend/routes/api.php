@@ -31,7 +31,7 @@ Route::prefix('v1')->group(function() {
     //cards
     Route::get('/cards',[CardController::class, 'index']);//todas las tarjetas
     Route::get('/cards/{id}',[CardController::class, 'show']);//tarjeta por id
-    Route::post('cards',[CardController::class, 'store']);//crear tarjeta
+    Route::post('/cards',[CardController::class, 'store']);//crear tarjeta
     Route::put('/cards/update/{id}',[CardController::class, 'update']);//actulizar tarjeta
     Route::patch('/cards/updateId/{id}',[CardController::class, 'updateId']);//actualizar id de la tarjeta
     Route::delete('cards/{id}',[CardController::class, 'destroy']);//borrar tarjeta

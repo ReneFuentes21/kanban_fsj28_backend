@@ -28,7 +28,8 @@ class BoardController extends Controller
 
     public function show($id)
     {
-        return Board::findOrFail($id);
+        $board = Board::findOrFail($id);
+        return response()->json($board);
     }
 
     public function update(Request $request, $id)
