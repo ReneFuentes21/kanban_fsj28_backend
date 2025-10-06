@@ -13,7 +13,7 @@ class Board extends Model
     
     protected $fillable = [
         'name',
-        //'numCards'
+        'numCards'
     ];
 
     protected $attributes = [

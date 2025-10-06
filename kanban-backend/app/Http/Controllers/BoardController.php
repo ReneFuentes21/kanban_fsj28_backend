@@ -68,7 +68,9 @@ class BoardController extends Controller
      * description="Datos del tablero a crear",
      * @OA\JsonContent(
      * required={"name"},
-     * @OA\Property(property="name", type="string", example="Tablero de Marketing")
+     * @OA\Property(property="name", type="string", example="Tablero de Marketing"),
+     * required={"numCards"},
+     * @OA\Property(property="numCards", type="integer", example=5)
      * )
      * ),
      * @OA\Response(
@@ -86,6 +88,7 @@ class BoardController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
+            'numCards' => 'required|integer'
         ]);
 
         $board = Board::create($request->all());

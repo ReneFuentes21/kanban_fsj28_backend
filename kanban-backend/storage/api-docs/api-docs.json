@@ -56,12 +56,16 @@
                         "application/json": {
                             "schema": {
                                 "required": [
-                                    "name"
+                                    "numCards"
                                 ],
                                 "properties": {
                                     "name": {
                                         "type": "string",
                                         "example": "Tablero de Marketing"
+                                    },
+                                    "numCards": {
+                                        "type": "integer",
+                                        "example": 5
                                     }
                                 },
                                 "type": "object"
